@@ -1,2 +1,4 @@
-docs/index.html linguist-generated
-docs/assets/* linguist-generated
+docs/** linguist-generated
+package-lock.json linguist-generated
+index.html linguist-vendored
+*.tsx linguist-language=TypeScript
