@@ -4,14 +4,20 @@ A SaaS analytics dashboard. Pick a date range and the KPIs, charts and tables al
 
 **Live demo:** https://malakmo7amed309.github.io/pulse/
 
-![Pulse overview](docs/showcase.gif)
+![Pulse overview](docs/screenshot.png)
+
+![Customer details](docs/screenshot-customer.png)
 
 ## Features
 
 - Sidebar layout with a mobile drawer, light and dark mode (follows the system, saved in the browser)
 - Date range filter (presets or custom dates) and plan filter. KPIs compare with the previous period
 - Charts react to the filters: revenue trend, signups by channel, revenue by plan. Data is grouped by day, week or month depending on the range
-- Customers table with search, plan and status filters, sortable columns, pagination
+- Customers table with search, plan and status filters, sortable columns, pagination, and CSV export of the filtered list
+- Customer details drawer: plan, MRR, annual value, activity timeline, copy email, and private notes saved in the browser
+- Command palette (Ctrl or Cmd + K): jump to a page, switch theme, or find a customer
+- Notifications panel with unread count and mark as read, remembered between visits
+- Settings: editable profile (validated, shown in the top bar), email notification switches, and a reset for all saved data
 - Loading skeletons, empty states and error states with retry. Settings has a slider for response delay and a switch that makes the API fail, so you can see each state
 - Filters and table state are kept in the URL (`range`, `from`, `to`, `plan`, `q`, `sort`, `dir`, `page`)
 

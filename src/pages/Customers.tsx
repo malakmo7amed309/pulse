@@ -5,13 +5,17 @@ import { Card } from '../components/ui/Card'
 import { Pagination } from '../components/ui/Pagination'
 import { Skeleton } from '../components/ui/Skeleton'
 import { EmptyState, ErrorState } from '../components/ui/StateViews'
-import { ArrowDownIcon, ArrowUpIcon, SearchIcon } from '../components/ui/icons'
+import { CustomerDrawer } from '../components/customers/CustomerDrawer'
+import { customersToCsv, downloadText } from '../lib/csv'
+import { getCustomers } from '../data/customers'
+import { queryCustomers } from '../lib/analytics'
+import { ArrowDownIcon, ArrowUpIcon, DownloadIcon, SearchIcon } from '../components/ui/icons'
 import { fetchCustomers } from '../data/api'
 import { PLANS } from '../data/metrics'
 import { useAsync } from '../hooks/useAsync'
 import { PAGE_SIZE, useCustomerQuery } from '../hooks/useCustomerQuery'
 import { count, longDate, money } from '../lib/format'
-import type { Plan, PlanFilter, SortKey, Status } from '../types'
+import type { Customer, Plan, PlanFilter, SortKey, Status } from '../types'
 
 const STATUS_TONE: Record<Status, Tone> = { Active: 'green', Trial: 'amber', Churned: 'slate' }
 const PLAN_TONE: Record<Plan, Tone> = { Starter: 'slate', Pro: 'indigo', Enterprise: 'violet' }
@@ -49,6 +53,12 @@ export default function Customers() {
     return () => clearTimeout(t)
   }, [text, query.q, update])
 
+  const [selected, setSelected] = useState<Customer | null>(null)
+  const exportCsv = () => {
+    const all = queryCustomers(getCustomers(), { ...query, page: 1, pageSize: 100000 }).rows
+    downloadText('pulse-customers.csv', customersToCsv(all))
+  }
+
   const loading = status === 'loading'
   const filtered = query.q !== '' || query.plan !== 'All' || query.status !== 'All'
 
@@ -63,7 +73,7 @@ export default function Customers() {
             <label htmlFor="search" className="sr-only">Search customers</label>
             <input id="search" type="search" value={text} onChange={(e) => setText(e.target.value)} placeholder="Search name, email, company or country" className={`${field} w-full pl-9`} />
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <label className="sr-only" htmlFor="plan">Plan</label>
             <select id="plan" className={`${field} flex-1`} value={query.plan} onChange={(e) => update({ plan: e.target.value as PlanFilter })}>
               <option value="All">All plans</option>
@@ -74,6 +84,7 @@ export default function Customers() {
               <option value="All">All statuses</option>
               {(['Active', 'Trial', 'Churned'] as Status[]).map((s) => <option key={s}>{s}</option>)}
             </select>
+            <button onClick={exportCsv} className={`${field} inline-flex items-center gap-2 font-medium hover:bg-slate-50 dark:hover:bg-slate-800`}><DownloadIcon width={16} height={16} />Export CSV</button>
           </div>
         </div>
 
@@ -108,7 +119,7 @@ export default function Customers() {
                   ? data.rows.map((c) => (
                       <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                         <td className="px-4 py-3">
-                          <div className="font-medium">{c.name}</div>
+                          <button onClick={() => setSelected(c)} className="text-left font-medium text-brand-700 hover:underline dark:text-brand-100">{c.name}</button>
                           <div className="text-xs text-slate-500 dark:text-slate-400">{c.company} <span className="hidden sm:inline">- {c.email}</span></div>
                         </td>
                         <td className="px-4 py-3"><Badge tone={PLAN_TONE[c.plan]}>{c.plan}</Badge></td>
@@ -132,6 +143,7 @@ export default function Customers() {
           <Pagination page={data.page} pageCount={data.pageCount} total={data.total} pageSize={PAGE_SIZE} onPage={(p) => update({ page: String(p) }, false)} />
         )}
       </Card>
+      <CustomerDrawer customer={selected} onClose={() => setSelected(null)} />
     </>
   )
 }

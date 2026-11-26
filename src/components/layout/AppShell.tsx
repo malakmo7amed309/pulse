@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
+import { CommandPalette } from './CommandPalette'
 
 export function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const { pathname } = useLocation()
 
   // Close the mobile drawer on navigation and on Escape, and return to the top of the page.
@@ -13,7 +15,13 @@ export function AppShell() {
     window.scrollTo(0, 0)
   }, [pathname])
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false)
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
@@ -25,11 +33,12 @@ export function AppShell() {
       </a>
       <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
       <div className="lg:pl-64">
-        <Topbar onMenu={() => setMenuOpen(true)} />
+        <Topbar onMenu={() => setMenuOpen(true)} onSearch={() => setSearchOpen(true)} />
         <main id="main" className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
           <Outlet />
         </main>
       </div>
+      <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   )
 }

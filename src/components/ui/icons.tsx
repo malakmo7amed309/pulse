@@ -57,3 +57,12 @@ export const AlertIcon = (p: P) => (
 export const InboxIcon = (p: P) => (
   <Icon {...p}><path d="M3 13l3-8h12l3 8v6H3z" /><path d="M3 13h5l1 3h6l1-3h5" /></Icon>
 )
+export const BellIcon = (p: P) => (
+  <Icon {...p}><path d="M6 9a6 6 0 1112 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z" /><path d="M10 20a2 2 0 004 0" /></Icon>
+)
+export const DownloadIcon = (p: P) => (
+  <Icon {...p}><path d="M12 3v12M7 10l5 5 5-5M4 20h16" /></Icon>
+)
+export const CopyIcon = (p: P) => (
+  <Icon {...p}><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V6a2 2 0 012-2h9" /></Icon>
+)

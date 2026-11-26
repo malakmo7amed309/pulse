@@ -1,6 +1,7 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
 import { DemoProvider } from './context/DemoContext'
+import { ProfileProvider } from './context/ProfileContext'
 import { ThemeProvider } from './context/ThemeContext'
 import Customers from './pages/Customers'
 import NotFound from './pages/NotFound'
@@ -13,6 +14,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <DemoProvider>
+        <ProfileProvider>
         <HashRouter>
           <Routes>
             <Route element={<AppShell />}>
@@ -24,6 +26,7 @@ export default function App() {
             </Route>
           </Routes>
         </HashRouter>
+      </ProfileProvider>
       </DemoProvider>
     </ThemeProvider>
   )
