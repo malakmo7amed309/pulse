@@ -4,7 +4,7 @@ A SaaS analytics dashboard. Pick a date range and the KPIs, charts and tables al
 
 **Live demo:** https://malakmo7amed309.github.io/pulse/
 
-![Pulse overview](docs/screenshot.png)
+![Pulse overview](docs/showcase.gif)
 
 ## Features
 
